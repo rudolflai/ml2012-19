@@ -2,12 +2,23 @@ function [ labelPredictions ] = testTrees( trees, testdata )
 %Produces a column of predictions by walking through the tree.
 entries = size(testdata,1);
 %create a matrix wth allocated space
-labelPredictions = zeros(entries,6);
+
+%labelPredictions = zeros(entries,6);
+labelPredictions = zeros(entries,1);
+
 for row=1:entries
     dataRow=testdata(row,:);
     for treeNo=1:6
         mark = testSingleTree ( trees(treeNo) , dataRow);
-        labelPredictions(row,treeNo) = mark;
+        if(mark==1)
+            if(labelPredictions(row)~=0)
+                fprintf('WARNING: MULTIPLE CLASSES')
+            end
+            labelPredictions(row,1) = treeNo*mark;
+        end
+        
+        %labelPredictions(row,treeNo) = mark;
+        
     end
         
 end

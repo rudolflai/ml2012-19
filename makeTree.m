@@ -5,11 +5,11 @@ function [ tree ] = makeTree( samples, attributes, targets )
 %   targets is the list of remapped labels (1s/0s)
 
 if all(targets)
-    tree = makeLeafNode(1)
+    tree = makeLeafNode(1);
 elseif ~any(targets)
-    tree = makeLeafNode(0)
+    tree = makeLeafNode(0);
 elseif isempty(attributes)
-    tree = makeLeafNode(majorityValue(targets))
+    tree = makeLeafNode(majorityValue(targets));
 else
     bestattribute = best_attribute(samples, attributes, targets);
     tree = makeBranchNode(bestattribute);    
@@ -33,7 +33,7 @@ end
 function [ node ] = makeLeafNode( label )
     node.class = label;
     node.kids = [];
-    nope.op = [];
+    node.op = [];
 end
 
 function [ node ] = makeBranchNode( attribute )
