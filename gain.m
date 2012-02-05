@@ -22,8 +22,8 @@ function [entropy, probability] = entropy(action_unit, value, examples, targets)
 
 	% action_unit either == 0 or > 0
 	if (action_unit == 0)
-		e_pos = sum(targets);
-		e_neg = size(targets, 1) - e_pos;
+		e_pos = sum(targets == 1);
+		e_neg = sum(targets == 0);
 	else
 	% filter out the relevant column, resulting in three cases
 	% au			target	au+target		action
@@ -31,7 +31,7 @@ function [entropy, probability] = entropy(action_unit, value, examples, targets)
 	% value		0				1						e_neg++
 	% !value	*				0						no action
 		e_pos = sum((examples(:, action_unit) == value) + (targets == 1) == 2);
-		e_neg = sum((examples(:, action_unit) == value) + (targets == 1) == 1);
+		e_neg = sum((examples(:, action_unit) == value) + (targets == 0) == 2);
 	end
 
 	total = e_pos + e_neg;
