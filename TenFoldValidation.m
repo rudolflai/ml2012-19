@@ -42,12 +42,7 @@ if(entries>=10)
         predictedValues = testTrees(foldedtree,testSet);
         
         errorVector = bitxor(predictedValues,testAnsSet);
-        errors = 0;
-        for loop=1:testSize
-            if (errorVector(loop)>0)
-                errors = errors+1;
-            end
-        end
+        errors = sum(errorVector>0);
         
         errorEst = errors/size(testAnsSet,1);
         fprintf('error = %d\n',errorEst);
