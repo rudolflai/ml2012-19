@@ -12,7 +12,7 @@ for row=1:entries
         mark = testSingleTree ( trees(treeNo) , dataRow);
         if(mark==1)
             if(labelPredictions(row)~=0)
-                fprintf('WARNING: MULTIPLE CLASSES')
+                fprintf('WARNING: MULTIPLE CLASSES\n')
             end
             labelPredictions(row,1) = treeNo*mark;
         end
