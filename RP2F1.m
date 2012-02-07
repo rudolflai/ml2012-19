@@ -1,6 +1,7 @@
 function [ f1 ] = RP2F1( rpmatrix )
-%RP2F1 Summary of this function goes here
-%   Detailed explanation goes here
+%RP2F1 Extracts F1 measure from recall and precision matrix
+%   rpmatrix: Recall and precision matrix
+%   Based on formulas given in CBC manual
 
 f1 = zeros(6,1);
 
