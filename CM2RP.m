@@ -13,7 +13,7 @@ for i=1:6,
     prmatrix(i,1) = true_p/sum_trials;
     
     %Precision
-    prmatrix(i,1) = true_p/sum_p;
+    prmatrix(i,2) = true_p/sum_p;
 end
 end
 
