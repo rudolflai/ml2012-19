@@ -19,7 +19,7 @@ entries = size(trainingData,1);
 if(entries>=10)
 
 %Next find the (maximum) no. of entries per test data set
-    testSize = floor(entries/10);
+    testSize = ceil(entries/10);
 
 %estmates would hold all the estimates after each fold 
     estimates = [0 0];
