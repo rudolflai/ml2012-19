@@ -1,0 +1,33 @@
+\documentclass[a4paper,10pt]{article}
+%\documentclass[a4paper,10pt]{scrartcl}
+
+\usepackage[utf8x]{inputenc}
+
+\title{Machine Learning CBC: Assignment Two}
+\author{csl209}
+\date{}
+
+\usepackage{mathptmx}
+
+\pdfinfo{%
+  /Title    ()
+  /Author   ()
+  /Creator  ()
+  /Producer ()
+  /Subject  ()
+  /Keywords ()
+}
+
+\begin{document}
+\LARGE\noindent
+\textsc{Machine Learning CBC \\ Assignment Two} \\[1cm]
+
+\large\noindent
+Xin Yan Kwek, Darcy Qiu, Charles Koh, and C.S. Rudolf Lai\\ 
+
+\normalsize
+
+\section*{Pruning}
+
+The \texttt{pruning\_example} function executes three \texttt{MATLAB} tree functions in this sequence: \texttt{treefit}, \texttt{treetest}, and \texttt{treeprune}. First it uses \texttt{treefit} to create a decision tree for predicting responses (targets) as a function of predictors (examples).  The tree is created such that impure nodes will be split as long as there are observations. Using \texttt{treetest}, the expectation of misclassification costs over all terminal nodes is then computed using both the resubstitution method and the 10-fold cross-validation method. Along with the cost, the standard error of each cost value, the terminal node count for each subtree, and an \textit{estimated best level of pruning} is also computed. Using the two estimated best level, we then use \texttt{treeprune} to prune the tree, coming up with two new trees.
+\end{document}
