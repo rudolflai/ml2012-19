@@ -1,4 +1,4 @@
-function [ errorEstimate ] = TenFoldValidation( trainingData,answersheet )
+function [ errorEstimate confused] = TenFoldValidation( trainingData,answersheet )
 %TENFOLDVALIDATION : Does the ten fold validation.
 %Returns the error estimate.
 %Inputs are the training data and the "answersheet" of the
@@ -11,6 +11,7 @@ function [ errorEstimate ] = TenFoldValidation( trainingData,answersheet )
 
 %default value
 errorEstimate = 0;
+confused = zeros(6,6);
 
 %First find size of training data
 entries = size(trainingData,1);
@@ -40,6 +41,8 @@ if(entries>=10)
         %now where test each tree with the testSet to get their predicted
         %values
         predictedValues = testTrees(foldedtree,testSet);
+        
+        confused = confused + ConfusionMatrix(testAnsSet,predictedValues);
         
         errorVector = bitxor(predictedValues,testAnsSet);
         errors = sum(errorVector>0);
