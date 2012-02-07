@@ -1,8 +1,8 @@
-function [ prmatrix ] = CM2RP( cfmatrix )
-%CM2RP Summary of this function goes here
-%   Detailed explanation goes here
+function [ rpmatrix ] = CM2RP( cfmatrix )
+%CM2RP Extracts recall and precision rates from a confusion matrix
+%   cfmatrix: 6 X 6 confusion matrix
 
-prmatrix = zeros(6,2);
+rpmatrix = zeros(6,2);
 
 for i=1:6,
     true_p = cfmatrix(i,i);
@@ -10,10 +10,10 @@ for i=1:6,
     sum_p = sum(cfmatrix(:,i));
     
     %Recall
-    prmatrix(i,1) = true_p/sum_trials;
+    rpmatrix(i,1) = true_p/sum_trials;
     
     %Precision
-    prmatrix(i,2) = true_p/sum_p;
+    rpmatrix(i,2) = true_p/sum_p;
 end
 end
 
