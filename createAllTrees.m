@@ -1,17 +1,21 @@
-function [ trees ] = createAllTrees( )
+function [ trees ] = createAllTrees(examples, targets, tenfold)
 %CREATETREES Generates trees for all the emotion labels and attaches a
-%   field to provide the F1-measure, so that the relative reliability of 
+%   field to provide the precision if tenfold = 1, so that the relative reliability of 
 %   each tree can be used to resolve ambiguity
+%   examples: training set
+%   targets: training expected results
+%   tenfold: boolean, use 10 fold cross validation to generate a precision data
 
-[examples, targets] = loaddata('cleandata_students.txt');
 trees = arrayfun(@(x) makeTreeForLabel(examples, targets, x), 1:6);
 
 
-% Generate F1-measure to measure the reliability of each tree
-[~,cm] = TenFoldValidation(examples,targets);
-rplist = CM2RP(cm);
-for i=1:6,
-    trees(i).precision = rplist(i,2); 
+if (tenfold)
+% Generate precision to measure the reliability of each tree
+    [~,cm] = TenFoldValidation(examples,targets,0);
+    rplist = CM2RP(cm);
+    for i=1:6,
+        trees(i).precision = rplist(i,2);
+    end
 end
 end
 

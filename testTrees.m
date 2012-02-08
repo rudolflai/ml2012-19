@@ -1,30 +1,36 @@
 function [ labelPredictions ] = testTrees( trees, testdata )
-NO_POS_THRESHOLD = 0.5
 %Produces a column of predictions by walking through the tree.
+%Combines the output of the 6 classifiers
+%If precision data is available, use it to determine which output is more
+%reliable.
+
+NO_POS_THRESHOLD = 0.5;
 entries = size(testdata, 1);
 
 labelPredictions = zeros(entries, 1);
 
 for row = 1:entries
     dataRow = testdata(row, :);
-    highestPrecision = -1;   % Choose the tree with highest precision when ambiguous
+    highestprecision = -1;   % Choose the tree with highest precision when ambiguous
     for treeNo = 1:6
         mark = testSingleTree(trees(treeNo), dataRow);
         if (mark == 1)
             % Multiclass conflict
             if (labelPredictions(row) ~= 0)
+                % Multiclass conflict
+            
                 if (~isfield(trees(treeNo), 'precision'))
-                    % Output -1 if precision measurement hasn't been calculated
-                    labelPredictions(row) = -1;
+                    % Output 8 if precision measurement hasn't been calculated
+                    labelPredictions(row) = 8;
                     break
                 else
                     if (trees(treeNo).precision > highestprecision)
                         labelPredictions(row) = treeNo;
-                        highestPrecision = trees(treeNo).precision;
+                        highestprecision = trees(treeNo).precision;
                     elseif (trees(treeNo).precision == highestprecision)
                         if (rand() > 0.5)
                             labelPredictions(row) = treeNo;
-                            highestPrecision = trees(treeNo).precision;
+                            highestprecision = trees(treeNo).precision;
                         end
                     end
                 end
@@ -36,14 +42,20 @@ for row = 1:entries
             end
         end
     end
+
     % No positive outputs
     if (labelPredictions(row) == 0)
-        [minPrecision, minIndex] = min([trees.precision]);
-        if (minPrecision < NO_POS_THRESHOLD)
-            labelPredictions(row) = minIndex;
-        else
-            labelPredictions(row) = floor(rand() * 6) + 1;
+        if (isfield(trees(treeNo), 'precision'))
+            [minPrecision, minIndex] = min([trees.precision]);
+            if (minPrecision < NO_POS_THRESHOLD)
+                labelPredictions(row) = minIndex;
+            else
+                labelPredictions(row) = floor(rand() * 6) + 1;
+            end
         end
+    % Multi-class conflict had occured    
+    elseif (labelPredictions(row) == 8)
+        labelPredictions(row) = 0;
     end
 end
 end

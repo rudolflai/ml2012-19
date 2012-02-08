@@ -1,8 +1,9 @@
-function [ errorEstimate confused] = TenFoldValidation( trainingData,answersheet )
+function [ errorEstimate confused] = TenFoldValidation( trainingData,answersheet,precisioncheck )
 %TENFOLDVALIDATION : Does the ten fold validation.
 %Returns the error estimate.
 %Inputs are the training data and the "answersheet" of the
-%emotions that correspond to the data.
+%emotions that correspond to the data. precisioncheck determines if 
+%we expect to have precision data of the tree when performing validation
 
 %Assumes the following: 
 %   rows in trainingdata = rows in answersheet
@@ -34,9 +35,7 @@ if(entries>=10)
         answersheet = answersheet(testSize+1:end,:);
         marker = marker+1;
         %we do the tree making and calculations here
-        for label=1:6
-            foldedtree(label) = makeTreeForLabel(trainingData,answersheet,label);
-        end     
+        foldedtree = createAllTrees(trainingData,answersheet,precisioncheck);  
    
         %now where test each tree with the testSet to get their predicted
         %values
@@ -58,7 +57,7 @@ if(entries>=10)
         
         %I know its expensize to reconnect the data but either way I need
         %to extract the set make the rest into a single matrix and pass it
-        %in the makeTree function. Either way its expensive
+        %in the createAllTrees function. Either way its expensive
         trainingData = [trainingData;testSet];
         answersheet = [answersheet;testAnsSet];
         
