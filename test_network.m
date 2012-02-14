@@ -1,38 +1,36 @@
-[examples, targets] = loaddata('cleandata_students.txt');
-[ann_exp,  ann_tar] = ANNdata(examples, targets);
+function [net, Y] = test_network(examples, targets, hiddenLayerSize, ...
+																	train_function, learning_rate, perf_func, ...
+																	no_epoch, no_goal, no_show)
 
 % Create a Fitting Network
 % -> no. of hidden layers
 % -> no. of neurons of hidden layers
-hiddenLayerSize = [6, 6];
 net             = feedforwardnet(hiddenLayerSize);
-net             = configure(net, ann_exp, ann_tar);
+net             = configure(net, examples, targets);
 
 % -> learning rate
-net.trainParam.lr 		= 0.001;
+net.trainParam.lr 		= learning_rate;
 % -> transfer functions
 net.layers{1}.transferFcn = 'tansig';
 net.layers{2}.transferFcn = 'tansig';
 net.layers{3}.transferFcn = 'tansig';
 % -> training functions
-net.trainFcn    = 'trainscg';  % Levenberg-Marquardt
+net.trainFcn    = train_function;  % Levenberg-Marquardt
 
 % Choose a Performance Function
 % For a list of all performance functions type: help nnperformance
-net.performFcn = 'mse';  % Mean squared error
+net.performFcn = perf_func;  % Mean squared error
 
 % Epochs between displays (NaN for no displays)
-net.trainParam.show 	= 25;
+net.trainParam.show 	= no_show;
 % Maximum number of epochs to train
-net.trainParam.epochs = 100;
+net.trainParam.epochs = no_epoch;
 % Performance goal
-net.trainParam.goal 	= 0;
+net.trainParam.goal 	= no_goal;
 % Initial mu
 % net.trainParam.mu 		= 0.001;
-% Learning rate
 
-net = train(net, ann_exp, ann_tar);
-Y = sim(net, ann_exp);
-% plot(P, T, P, Y, 'r.');
+net = train(net, examples, targets);
+Y   = sim(net, examples);
 
-
+end
