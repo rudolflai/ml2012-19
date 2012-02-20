@@ -11,8 +11,11 @@ function [ accuracy ] = testTopo( neuronsperlayer, examples, targets )
 
 net = feedforwardnet(neuronsperlayer);
 net = configure(net, examples, targets);
-net.trainParam.epoch = 50;
+net.trainParam.epoch = 100;
 net = train(net, examples, targets);
+output = sim(net, examples);
+
+perform(net,
 
 end
 
