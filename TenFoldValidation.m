@@ -1,9 +1,12 @@
-function [ errorEstimate confused] = TenFoldValidation( trainingData,answersheet,precisioncheck )
+function [ errorEstimate confused] = TenFoldValidation( trainingData, ...
+                    answersheet,hiddenLayerSize, ...
+					train_function, learning_rate, trans_function, ...
+                    perf_func, no_epoch, no_goal, no_show )
 %TENFOLDVALIDATION : Does the ten fold validation.
 %Returns the error estimate.
 %Inputs are the training data and the "answersheet" of the
-%emotions that correspond to the data. precisioncheck determines if 
-%we expect to have precision data of the tree when performing validation
+%emotions that correspond to the data. 
+%the rest are the optimized parameters
 
 %Assumes the following: 
 %   rows in trainingdata = rows in answersheet
@@ -34,12 +37,12 @@ if(entries>=10)
         trainingData = trainingData(testSize+1:end,:);
         answersheet = answersheet(testSize+1:end,:);
         marker = marker+1;
-        %we do the tree making and calculations here
-        foldedtree = createAllTrees(trainingData,answersheet,precisioncheck);  
-   
-        %now where test each tree with the testSet to get their predicted
-        %values
-        predictedValues = testTrees(foldedtree,testSet);
+        %MAKE ANN HERE
+        [net tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
+					train_function, learning_rate, trans_function, ...
+                    perf_func, no_epoch, no_goal, no_show);
+        %CALL testANN
+        predictedValues = testANN(net,testSet);
         
         confused = confused + ConfusionMatrix(testAnsSet,predictedValues);
         
