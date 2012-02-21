@@ -6,11 +6,23 @@ rows = size(results,1);
 cols = size(results,2);
 
 [x,y] = meshgrid(1:cols,1:rows)
+metricmatrix = reshape([results.(metric)],rows,cols);
 
-plot3(x,y,reshape([results.(metric)],rows,cols));
+figure
+plot3(x,y,metricmatrix);
 xlabel('Neurons in layer 1');
 ylabel('Neurons in layer 2');
 grid on;
+
+errormin = min(metricmatrix(:));
+% [x y] ==> y neurons in layer 1, x neurons in layer 2
+[xmin ymin] = find(metricmatrix == errormin,1);
+
+
+fprintf('Minimum performance error at Layer 1:%d, Layer 2: %d with error: %f\n'...
+    ,ymin,xmin,errormin);
+
+
 
 end
 
