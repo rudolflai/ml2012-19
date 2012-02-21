@@ -36,6 +36,9 @@ net.trainParam.show 	= no_show;
 % Initial mu
 % net.trainParam.mu 		= 0.001;
 
+% Hide training GUI 
+net.trainParam.showWindow = 0;
+
 [net, tr] = train(net, examples, targets);
 Y   = sim(net, examples);
 
