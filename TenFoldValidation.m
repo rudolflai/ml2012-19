@@ -68,12 +68,13 @@ if(entries>=10)
   %          end
             finalPrediction = zeros(6,testSize);
        
-            for emotion=1:6
-                singleAns = answersheet==emotion;
-                [net tr] = createNetwork( trainingData,singleAns,hiddenLayerSize, ...
+            [nets tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
                 	train_function, learning_rate, trans_function, ...
                      perf_func, no_epoch, no_goal, no_show,1);
-                finalPrediction(emotion,:) =  testANN(net,testSet);
+                 
+            for emotion=1:6
+                
+                finalPrediction(emotion,:) =  testANN(nets{emotion},testSet);
             end
             predictedValues = NNout2labels(finalPrediction);
         else
