@@ -1,7 +1,9 @@
 function [ resultnet ,tr ] = createNetwork( uexamples, utargets, hiddenLayerSize, ...
 					train_function, learning_rate, trans_function, ...
                     perf_func, no_epoch, no_goal, no_show,single)
-%CREATENETWORK Creates  a trained network WITH LOADDATA FORMAT uexamples and utargets 
+%CREATENETWORK Creates a trained network WITH LOADDATA FORMAT uexamples and utargets 
+% If single is set to 1, it will create 6 single output trees in a cell
+% array
 %OUT: NN, training record, outputs from all data
 % e.g [net,tr,Y] =
 % createNetwork(x,y,10,'trainlm',0.02,{'tansig'},'mse',100,0,5,0)
