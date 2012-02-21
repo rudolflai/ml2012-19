@@ -1,13 +1,16 @@
 function [ net ,tr ] = createNetwork( uexamples, utargets, hiddenLayerSize, ...
 					train_function, learning_rate, trans_function, ...
-                    perf_func, no_epoch, no_goal, no_show)
+                    perf_func, no_epoch, no_goal, no_show,single)
 %CREATENETWORK Creates  a trained network WITH LOADDATA FORMAT uexamples and utargets 
 %OUT: NN, training record, outputs from all data
 % e.g [net,tr,Y] =
-% creatNetwork(x,y,10,'trainlm',0.02,{'tansig'},'mse',100,0,5)
+% createNetwork(x,y,10,'trainlm',0.02,{'tansig'},'mse',100,0,5)
 % -> no of hidden layers
 % -> no. of neurons of hidden layers
 [examples targets] = ANNdata(uexamples,utargets);
+if(single)
+    targets = utargets';
+end
 
 net             = feedforwardnet(hiddenLayerSize);
 net             = configure(net, examples, targets);

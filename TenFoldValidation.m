@@ -1,12 +1,13 @@
 function [ errorEstimate confused] = TenFoldValidation( trainingData, ...
                     answersheet,hiddenLayerSize, ...
 					train_function, learning_rate, trans_function, ...
-                    perf_func, no_epoch, no_goal, no_show )
+                    perf_func, no_epoch, no_goal, no_show, single )
 %TENFOLDVALIDATION : Does the ten fold validation.
 %Returns the error estimate.
 %Inputs are the training data and the "answersheet" of the
 %emotions that correspond to the data. 
 %the rest are the optimized parameters
+%single is a boolean needed to determine if the output is single or not
 
 %Assumes the following: 
 %   rows in trainingdata = rows in answersheet
@@ -37,13 +38,50 @@ if(entries>=10)
         trainingData = trainingData(testSize+1:end,:);
         answersheet = answersheet(testSize+1:end,:);
         marker = marker+1;
-        %MAKE ANN HERE
-        [net tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
-					train_function, learning_rate, trans_function, ...
-                    perf_func, no_epoch, no_goal, no_show);
-        %CALL testANN
-        predictedValues = testANN(net,testSet);
         
+        if(single)
+            
+            finalPrediction = zeros(testSize,6);
+            [lookupnet tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
+                	train_function, learning_rate, trans_function, ...
+                     perf_func, no_epoch, no_goal, no_show,0);
+            lookupPred = testANN(lookupnet,testSet);
+            for emotion=1:6
+                singleAns = answersheet==emotion;
+                [net tr] = createNetwork( trainingData,singleAns,hiddenLayerSize, ...
+                	train_function, learning_rate, trans_function, ...
+                     perf_func, no_epoch, no_goal, no_show,1);
+                 
+                temppredictedValues = testANN(net,testSet);
+                finalPrediction(:,emotion) = temppredictedValues==1;
+            end
+            predictedValues = zeros(testSize,1);
+            for ambcheck=1:testSize
+                if(sum(finalPrediction(ambcheck,:)~=1))
+                    predictedValues(ambcheck) = lookupPred(ambcheck,1);
+                else
+                    [v col] = max(finalPrediction(ambcheck,:));
+                    predictedValues(ambcheck) =  col;
+                end
+            end
+  %          finalPrediction = zeros(6,testSize);
+       
+  %          for emotion=1:6
+  %              singleAns = answersheet==emotion;
+  %              [net tr] = createNetwork( trainingData,singleAns,hiddenLayerSize, ...
+  %              	train_function, learning_rate, trans_function, ...
+  %                   perf_func, no_epoch, no_goal, no_show,1);
+  %              finalPrediction(emotion,:) =  testANN(net,testSet);
+  %          end
+  %          predictedValues = NNout2labels(finalPrediction);
+        else
+        %MAKE ANN HERE
+            [net tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
+                	train_function, learning_rate, trans_function, ...
+                     perf_func, no_epoch, no_goal, no_show,0);
+            %CALL testANN
+            predictedValues = testANN(net,testSet);    
+        end
         confused = confused + ConfusionMatrix(testAnsSet,predictedValues);
         
         errorVector = bitxor(predictedValues,testAnsSet);
