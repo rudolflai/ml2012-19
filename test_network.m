@@ -1,4 +1,4 @@
-function [net, tr, Y] = test_network(examples, targets, hiddenLayerSize, ...
+function [net, tr] = test_network(examples, targets, hiddenLayerSize, ...
 					train_function, learning_rate, trans_function, ...
                     perf_func, no_epoch, no_goal, no_show)
 
@@ -36,7 +36,9 @@ net.trainParam.show 	= no_show;
 % Initial mu
 % net.trainParam.mu 		= 0.001;
 
-[net, tr] = train(net, examples, targets);
-Y   = sim(net, examples);
+% Hide training GUI 
+net.trainParam.showWindow = 0;
 
+[net, tr] = train(net, examples, targets);
+tr.totalperf = perform(net,targets,sim(net,examples));
 end
