@@ -5,7 +5,7 @@ function [] = plotResult( results, metric )
 rows = size(results,1);
 cols = size(results,2);
 
-[x,y] = meshgrid(1:cols,1:rows)
+[x,y] = meshgrid(1:cols,1:rows);
 metricmatrix = reshape([results.(metric)],rows,cols);
 
 figure
@@ -19,8 +19,8 @@ errormin = min(metricmatrix(:));
 [xmin ymin] = find(metricmatrix == errormin,1);
 
 
-fprintf('Minimum performance error at Layer 1:%d, Layer 2: %d with error: %f\n'...
-    ,ymin,xmin,errormin);
+fprintf('Minimum at Layer 1:%d, Layer 2: %d with %s: %f\n'...
+    ,ymin,xmin,metric,errormin);
 
 
 
