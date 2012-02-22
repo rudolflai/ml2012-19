@@ -14,24 +14,23 @@ show = 1;
 
 transferfcn = {'tansig'};
 
-result = zeros(epochs,trials);
-enum = zeros(epochs,trials);
+figure
+set(gca,'XLim',[0 40]);
+set(gca,'YLim',[0 0.8]);
+title(['With ' int2str(neurons) ' neurons'])
+hold on
 
 for i=1:trials,
     
     [~,tr] = test_network(x2, y2, neurons, ...
 					trainingfcn, learningrate, transferfcn, ...
                     perffcn, epochs, goal, show);    
-    result(1:tr.num_epochs+1,i) = tr.(metric);                 
-    enum(1:tr.num_epochs+1,i) = tr.epoch;
+                
+   plot(tr.epoch,tr.(metric),'DisplayName',['Trial' int2str(i)]);
+                
 end
-
-enum
-result
-
-figure
-plot(enum,result);
     
+hold off
 
 end
 
