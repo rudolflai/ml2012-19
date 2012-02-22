@@ -19,11 +19,19 @@ netHolder = cell(repeat,1);
 for emotion=1:repeat
 
     net             = feedforwardnet(hiddenLayerSize);
+    
     if(single)
-        net             = configure(net, examples, targets(emotion,:));
+        
+        currentTargets = zeros(2,size(targets,2));
+        currentTargets(1,:) = targets(emotion,:);
+        currentTargets(2,:) = targets(emotion,:)==0;
     else
-        net             = configure(net, examples, targets);
+        currentTargets = targets;
     end
+    
+   
+    net             = configure(net, examples, currentTargets);
+   
     % -> training functions
     net.trainFcn    = train_function;  % Levenberg-Marquardt
 
@@ -48,11 +56,9 @@ for emotion=1:repeat
     net.trainParam.show 	= no_show;
     % Initial mu
     % net.trainParam.mu 		= 0.001;
-    if (single)
-        [net, tr] = train(net, examples, targets(emotion,:));
-    else
-        [net, tr] = train(net, examples, targets);
-    end
+
+    [net, tr] = train(net, examples, currentTargets);
+  
     netHolder{emotion} = net;
 end
 

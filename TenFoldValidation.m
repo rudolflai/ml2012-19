@@ -73,9 +73,9 @@ if(entries>=10)
                      perf_func, no_epoch, no_goal, no_show,1);
                  
             for emotion=1:6
-                
-                finalPrediction(emotion,:) =  testANN(nets{emotion},testSet);
+                finalPrediction(emotion,:) =  testSingleANN(nets{emotion},testSet);
             end
+            
             predictedValues = NNout2labels(finalPrediction);
         else
         %MAKE ANN HERE
@@ -112,5 +112,4 @@ if(entries>=10)
 end
 
 end
-
 
