@@ -3,8 +3,8 @@ function [net, tr] = test_network(examples, targets, hiddenLayerSize, ...
                     perf_func, no_epoch, no_goal, no_show)
 
 % Create a Fitting Network
-% OUT: NN, training record, outputs from all data
-% e.g [net,tr,Y] =
+% OUT: NN, training record
+% e.g [net,tr] =
 % test_network(x2,y2,10,'trainlm',0.02,{'tansig'},'mse',100,0,5)
 % -> no. of hidden layers
 % -> no. of neurons of hidden layers
@@ -37,7 +37,9 @@ net.trainParam.show 	= no_show;
 % net.trainParam.mu 		= 0.001;
 
 % Hide training GUI 
-net.trainParam.showWindow = 0;
+net.trainParam.showWindow = false;
+% Hide show on console 
+net.trainParam.showCommandLine = true;
 
 [net, tr] = train(net, examples, targets);
 tr.totalperf = perform(net,targets,sim(net,examples));
