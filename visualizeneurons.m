@@ -19,11 +19,11 @@ show = 1;
 
 transferfcn = {'tansig'};
 
-figure
+%figure
 set(gca,'XLim',[0 20]);
 set(gca,'YLim',[0 0.4]);
 title(['With ' int2str(neurons) ' neurons'])
-hold on
+%hold on
 
 bestmetricarr = zeros(1,trials);
 
@@ -33,11 +33,11 @@ for i=1:trials,
 					trainingfcn, learningrate, transferfcn, ...
                     perffcn, epochs, goal, show);    
                 
-   plot(tr.epoch,tr.(metric),'DisplayName',['Trial' int2str(i)]);
+%   plot(tr.epoch,tr.(metric),'DisplayName',['Trial' int2str(i)]);
    bestmetricarr(i) = tr.(['best_' metric]);              
 end
     
-hold off
+%hold off
 
 end
 
