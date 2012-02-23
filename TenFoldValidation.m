@@ -1,4 +1,5 @@
-function [ errorEstimate confused] = TenFoldValidation( trainingData, ...
+function [ errorEstimate confused foldedConfused growingCM] =...
+                    TenFoldValidation( trainingData, ...
                     answersheet,hiddenLayerSize, ...
 					train_function, learning_rate, trans_function, ...
                     perf_func, no_epoch, no_goal, no_show, single )
@@ -17,6 +18,8 @@ function [ errorEstimate confused] = TenFoldValidation( trainingData, ...
 %default value
 errorEstimate = 0;
 confused = zeros(6,6);
+foldedConfused = cell(10,1);
+growingCM = cell(10,1);
 
 %First find size of training data
 entries = size(trainingData,1);
@@ -29,15 +32,13 @@ if(entries>=10)
 %estmates would hold all the estimates after each fold 
     estimates = [0 0];
     
-    marker = 1;
     
 %loops through the folding procress
-    while(marker*testSize<=entries)
+    for fold=1:10
         testSet = trainingData(1:testSize,:);
         testAnsSet = answersheet(1:testSize,:);
         trainingData = trainingData(testSize+1:end,:);
         answersheet = answersheet(testSize+1:end,:);
-        marker = marker+1;
         
         %MAKE ANN HERE
         [net tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
@@ -46,13 +47,19 @@ if(entries>=10)
         %CALL testANN
         predictedValues = testANN(net,testSet);    
         
-        confused = confused + ConfusionMatrix(testAnsSet,predictedValues);
+        localCM = ConfusionMatrix(testAnsSet,predictedValues);
+        
+        foldedConfused{fold} = localCM;
+        
+        confused = confused + localCM;
+        
+        growingCM{fold} = confused;
         
         errorVector = bitxor(predictedValues,testAnsSet);
         errors = sum(errorVector>0);
         
         errorEst = errors/size(testAnsSet,1);
-        fprintf('error = %d\n',errorEst);
+        %fprintf('error = %d\n',errorEst);
         
         % I would have used mean but I'm not sure how many test sets there
         % will be all together. Since the array is not as powerful  as the
