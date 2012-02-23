@@ -48,5 +48,5 @@ testexamples = examples(:,tr.testInd);
 expectedoutput = NNout2labels(targets(:,tr.testInd));
 testoutput = NNout2labels(sim(net,testexamples));
 CM = ConfusionMatrix(expectedoutput,testoutput);
-tr.best_f1 = mean(RP2F1(CM2RP(CM)));
+tr.best_f1 = nanmean(RP2F1(CM2RP(CM)));
 end
