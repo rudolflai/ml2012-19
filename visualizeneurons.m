@@ -1,4 +1,5 @@
-function [ bestmetricarr ] = visualizeneurons( neurons, trials, metric,varargin)
+function [ bestmetricarr ] = visualizeneurons( neurons, trials, metric, ...
+    testRatio, varargin)
 %VISUALIZENEURONS Summary of this function goes here
 %   Detailed explanation goes here
 if (size(varargin,2) == 0)
@@ -31,7 +32,7 @@ for i=1:trials,
     
     [~,tr] = test_network(x2, y2, neurons, ...
 					trainingfcn, learningrate, transferfcn, ...
-                    perffcn, epochs, goal, show);    
+                    perffcn, epochs, goal, show, testRatio);    
                 
 %   plot(tr.epoch,tr.(metric),'DisplayName',['Trial' int2str(i)]);
    bestmetricarr(i) = tr.(['best_' metric]);              

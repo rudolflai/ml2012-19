@@ -1,6 +1,6 @@
 function [net, tr] = test_network(examples, targets, hiddenLayerSize, ...
 					train_function, learning_rate, trans_function, ...
-                    perf_func, no_epoch, no_goal, no_show)
+                    perf_func, no_epoch, no_goal, no_show, testratio)
 
 % Create a Fitting Network
 % OUT: NN, training record
@@ -8,8 +8,19 @@ function [net, tr] = test_network(examples, targets, hiddenLayerSize, ...
 % test_network(x2,y2,10,'trainlm',0.02,{'tansig'},'mse',100,0,5)
 % -> no. of hidden layers
 % -> no. of neurons of hidden layers
-net             = feedforwardnet(hiddenLayerSize);
-net             = configure(net, examples, targets);
+
+
+% Extract test set and training set
+datasize = size(examples,2);
+randlogicarr = randperm(datasize);
+testsetsize = round(datasize * testratio);
+testsetexample = examples(:,randlogicarr(1:testsetsize));
+testsetoutput = NNout2labels(targets(:,randlogicarr(1:testsetsize)));
+trainingsetexample = examples(:,randlogicarr(:,testsetsize+1:end));
+trainingsetoutput = targets(:,randlogicarr(:,testsetsize+1:end));
+
+net = feedforwardnet(hiddenLayerSize);
+net = configure(net, trainingsetexample, trainingsetoutput);
 
 % -> training functions
 net.trainFcn    = train_function;  % Levenberg-Marquardt
@@ -41,12 +52,12 @@ net.trainParam.showWindow = false;
 % Hide show on console 
 net.trainParam.showCommandLine = true;
 
-[net, tr] = train(net, examples, targets);
-tr.totalperf = perform(net,targets,sim(net,examples));
+% train the network
+[net, tr] = train(net, trainingsetexample, trainingsetoutput);
 
-testexamples = examples(:,tr.testInd);
-expectedoutput = NNout2labels(targets(:,tr.testInd));
-testoutput = NNout2labels(sim(net,testexamples));
-CM = ConfusionMatrix(expectedoutput,testoutput);
+% add metrics
+tr.totalperf = perform(net,trainingsetoutput,sim(net,trainingsetexample));
+netoutput = NNout2labels(sim(net,testsetexample));
+CM = ConfusionMatrix(testsetoutput,netoutput);
 tr.best_f1 = nanmean(RP2F1(CM2RP(CM)));
 end
