@@ -33,24 +33,23 @@ rounds = 10;
 performances = zeros(1, perfSize);
 if xAxisType == 1
     xAxis = learning_rates;
-    plotTitle = 'learning rate';
 elseif xAxisType == 2
     xAxis = mus;
-    plotTitle = 'learning rate';
 elseif xAxisType == 3
     xAxis = momentums;
-    plotTitle = 'learning rate';
 end
+
+
 
 for m = 1:rounds
     for i = 1:perfSize
         net = feedforwardnet(hiddenlayer_sizes, training_fn);
-        
-        for j = 1:length(hiddenlayer_sizes)
-            net.layers{j}.transferFcn = 'tansig';
-        end
-        
         net.trainParam.epochs = 500;
+
+        % TODO: Set transfer function for each layer in the network
+        for i=1:layers,
+            transferfcn{i} = 'tansig';
+        end
 
         net.trainParam.showWindow = 0;  % Turn off GUI
         net.trainParam.showCommandLine = 1; % Turn on CL
@@ -76,4 +75,3 @@ end
 
 % Plot the related param against performance.
 plot(xAxis, performances/rounds);
-title(plotTitle);
