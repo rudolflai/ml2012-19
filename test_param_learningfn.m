@@ -36,10 +36,10 @@ if xAxisType == 1
     plotTitle = 'learning rate';
 elseif xAxisType == 2
     xAxis = mus;
-    plotTitle = 'learning rate';
+    plotTitle = 'mu';
 elseif xAxisType == 3
     xAxis = momentums;
-    plotTitle = 'learning rate';
+    plotTitle = 'momentum';
 end
 
 for m = 1:rounds
