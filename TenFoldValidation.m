@@ -39,52 +39,13 @@ if(entries>=10)
         answersheet = answersheet(testSize+1:end,:);
         marker = marker+1;
         
-        if(single)
-  %THIS IS NOT USED AS IT DOES NOT SOLVE THE CONFLICTS WITH INFORMATION
-  %FROM
-  %THE 6 NETWORKS
-  %         finalPrediction = zeros(testSize,6);
-  %          [lookupnet tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
-  %              	train_function, learning_rate, trans_function, ...
-  %                   perf_func, no_epoch, no_goal, no_show,0);
-  %          lookupPred = testANN(lookupnet,testSet);
-  %          for emotion=1:6
-  %              singleAns = answersheet==emotion;
-  %              [net tr] = createNetwork( trainingData,singleAns,hiddenLayerSize, ...
-  %              	train_function, learning_rate, trans_function, ...
-  %                   perf_func, no_epoch, no_goal, no_show,1);
-  %               
-  %              temppredictedValues = testANN(net,testSet);
-  %              finalPrediction(:,emotion) = temppredictedValues==1;
-  %          end
-  %          predictedValues = zeros(testSize,1);
-  %          for ambcheck=1:testSize
-  %              if(sum(finalPrediction(ambcheck,:)~=1))
-  %                  predictedValues(ambcheck) = lookupPred(ambcheck,1);
-  %              else
-  %                  [v col] = max(finalPrediction(ambcheck,:));
-  %                  predictedValues(ambcheck) =  col;
-  %              end
-  %          end
-            finalPrediction = zeros(6,testSize);
-       
-            [nets tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
-                	train_function, learning_rate, trans_function, ...
-                     perf_func, no_epoch, no_goal, no_show,1);
-                 
-            for emotion=1:6
-                finalPrediction(emotion,:) =  testSingleANN(nets{emotion},testSet);
-            end
-            
-            predictedValues = NNout2labels(finalPrediction);
-        else
         %MAKE ANN HERE
-            [net tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
+        [net tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
                 	train_function, learning_rate, trans_function, ...
-                     perf_func, no_epoch, no_goal, no_show,0);
-            %CALL testANN
-            predictedValues = testANN(net,testSet);    
-        end
+                 perf_func, no_epoch, no_goal, no_show,single);
+        %CALL testANN
+        predictedValues = testANN(net,testSet);    
+        
         confused = confused + ConfusionMatrix(testAnsSet,predictedValues);
         
         errorVector = bitxor(predictedValues,testAnsSet);

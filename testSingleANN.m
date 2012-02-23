@@ -9,6 +9,7 @@ function [ pred ] = testSingleANN( net, au )
             pred(col) = pred1(I(col),col);
         end
     end
+    
 
 end
 

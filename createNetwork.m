@@ -21,10 +21,11 @@ for emotion=1:repeat
     net             = feedforwardnet(hiddenLayerSize);
     
     if(single)
-        
+    
         currentTargets = zeros(2,size(targets,2));
         currentTargets(1,:) = targets(emotion,:);
         currentTargets(2,:) = targets(emotion,:)==0;
+        
     else
         currentTargets = targets;
     end
@@ -62,11 +63,8 @@ for emotion=1:repeat
     netHolder{emotion} = net;
 end
 
-if(repeat==1)
-    resultnet = netHolder{repeat};
-else
-    resultnet = netHolder;
-end
+
+resultnet = netHolder;
     
 end
 
