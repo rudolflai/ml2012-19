@@ -1,9 +1,14 @@
-function [ bestmetricarr ] = visualizeneurons( neurons, trials, metric )
+function [ bestmetricarr ] = visualizeneurons( neurons, trials, metric,varargin)
 %VISUALIZENEURONS Summary of this function goes here
 %   Detailed explanation goes here
+if (size(varargin,2) == 0)
 
-[x,y] = loaddata('cleandata_students.txt');
-[x2,y2] = ANNdata(x,y);
+  [x,y] = loaddata('cleandata_students.txt');
+  [x2,y2] = ANNdata(x,y);
+else
+  x2 = varargin{1};
+  y2 = varargin{2};
+end
 
 trainingfcn = 'trainlm';
 perffcn = 'mse';
