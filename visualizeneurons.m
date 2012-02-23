@@ -1,4 +1,4 @@
-function [ ] = visualizeneurons( neurons, trials, metric )
+function [ bestmetricarr ] = visualizeneurons( neurons, trials, metric )
 %VISUALIZENEURONS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -15,10 +15,12 @@ show = 1;
 transferfcn = {'tansig'};
 
 figure
-set(gca,'XLim',[0 40]);
-set(gca,'YLim',[0 0.8]);
+set(gca,'XLim',[0 20]);
+set(gca,'YLim',[0 0.4]);
 title(['With ' int2str(neurons) ' neurons'])
 hold on
+
+bestmetricarr = zeros(1,trials);
 
 for i=1:trials,
     
@@ -27,7 +29,7 @@ for i=1:trials,
                     perffcn, epochs, goal, show);    
                 
    plot(tr.epoch,tr.(metric),'DisplayName',['Trial' int2str(i)]);
-                
+   bestmetricarr(i) = tr.(['best_' metric]);              
 end
     
 hold off
