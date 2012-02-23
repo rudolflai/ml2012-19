@@ -3,12 +3,12 @@ function [ pred ] = testSingleANN( net, au )
     [pred1, tr] = sim(net,au');
     [v I] = max(pred1);
     entry = size(I,2);
-    pred = zeros(1,entry);
-    for col=1:entry
-        if(I(col)==1)
-            pred(col) = pred1(I(col),col);
-        end
-    end
+    pred = pred1(1,:)';
+    %for col=1:entry
+    %    if(I(col)==1)
+    %        pred(col) = pred1(I(col),col);
+    %    end
+    %end
     
 
 end
