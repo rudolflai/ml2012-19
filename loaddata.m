@@ -9,13 +9,13 @@ function [x y] = loaddata(f)
 %OUT: x: sparse, binary featureset of aus [N x 45]
 %     y: emotion labels 
 fid = fopen(f, 'rt');
-eof = 0;
 x = [];
 y = [];
 while 1
 	A = zeros(1, 45);
 	s = textscan(fid, '%s', 1); 
 	if isempty(s{1})
+        fclose(fid);
 		return
 	end
 	e = textscan(fid, '%s', 1); 
@@ -24,3 +24,5 @@ while 1
 	y = vertcat(y, str2emolab(char(e{1}))); 
 	x = vertcat(x, A);
 end
+
+
