@@ -28,18 +28,18 @@ x trainru	Unsupervised random order weight/bias training
 trains	Sequential order incremental training with learning functions
 trainscg	Scaled conjugate gradient backpropagation
 %}
-rounds = 10;
+rounds = 5;
 
 performances = zeros(1, perfSize);
 if xAxisType == 1
     xAxis = learning_rates;
-    plotTitle = 'learning rate';
+    xTitle = 'learning rate';
 elseif xAxisType == 2
     xAxis = mus;
-    plotTitle = 'mu';
+    xTitle = 'mu';
 elseif xAxisType == 3
     xAxis = momentums;
-    plotTitle = 'momentum';
+    xTitle = 'momentum';
 end
 
 for m = 1:rounds
@@ -76,4 +76,6 @@ end
 
 % Plot the related param against performance.
 plot(xAxis, performances/rounds);
-title(plotTitle);
+title(training_fn);
+xlabel(xTitle);
+ylabel('performance');
