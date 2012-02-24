@@ -1,8 +1,8 @@
 
 [val1 val2 foldedSingleOutCM]=...
-    TenFoldValidation(x,y,26,'trainlm',0.02,{'tansig'},'mse',100,0,5,1);
+    TenFoldValidation(x,y,26,'trainscg',0.02,{'tansig'},'mse',100,0,5,1);
 [val3 val4 foldedSixOutCM]=...
-    TenFoldValidation(x,y,26,'trainlm',0.02,{'tansig'},'mse',100,0,5,0);
+    TenFoldValidation(x,y,11,'trainscg',0.02,{'tansig'},'mse',100,0,5,0);
 
 singleOutF1 = zeros(10,1);
 sixOutF1 = zeros(10,1);
