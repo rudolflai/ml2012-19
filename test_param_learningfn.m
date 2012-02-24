@@ -30,7 +30,14 @@ trainscg	Scaled conjugate gradient backpropagation
 %}
 rounds = 5;
 
+randInds = randperm(100);
+trainInds = randInds(trainInds);
+valInds = randInds(valInds);
+testInds = randInds(testInds);
+
 performances = zeros(1, perfSize);
+f1s = zeros(1, perfSize);
+
 if xAxisType == 1
     xAxis = learning_rates;
     xTitle = 'learning rate';
@@ -67,7 +74,19 @@ for m = 1:rounds
         net.divideParam.testInd = testInds;
 
         net = train(net, x2, y2);
+        %predicted_output = sim(net, x2);
+        
+        
+        %[net, tr] = train(net, x2, y2);
         predicted_output = sim(net, x2);
+        %tr.totalperf = perform(net,y2,predicted_output);
+        testexamples = x2(:,testInds);
+        expectedoutput = NNout2labels(y2(:,testInds));
+        testoutput = NNout2labels(sim(net,testexamples));
+        CM = ConfusionMatrix(expectedoutput,testoutput);
+        %tr.best_f1 = nanmean(RP2F1(CM2RP(CM)));      
+        
+        f1s(i) = f1s(i) + nanmean(RP2F1(CM2RP(CM)));
 
         % perform() by default uses "mean square error (mse)"
         performances(i) = performances(i) + perform(net, y2, predicted_output);
@@ -75,7 +94,10 @@ for m = 1:rounds
 end
 
 % Plot the related param against performance.
+%plot(xAxis, performances/rounds, xAxis, f1s/rounds);
+%plot(xAxis, f1s/rounds);
 plot(xAxis, performances/rounds);
 title(training_fn);
 xlabel(xTitle);
-ylabel('performance');
+%ylabel('performance');
+%legend('mse', 'f1');
