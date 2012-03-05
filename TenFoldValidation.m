@@ -54,8 +54,7 @@ for foldcount=1:10,
     total.cm = total.cm + foldcm;
 end
 
-averagerp = mean(CM2RP(total.cm),1);
-total.recall = averagerp(1);
-total.precision = averagerp(2);
+total.averagerp = CM2RP(total.cm);
+total.f1 = mean(total.averagerp(:));
 end
 
