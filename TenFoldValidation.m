@@ -1,76 +1,61 @@
-function [ errorEstimate confused] = TenFoldValidation( trainingData, ...
-                    answersheet,hiddenLayerSize, ...
-					train_function, learning_rate, trans_function, ...
-                    perf_func, no_epoch, no_goal, no_show, single )
+function [perfold, total] = TenFoldValidation(examples, targets)
 %TENFOLDVALIDATION : Does the ten fold validation.
 %Returns the error estimate.
-%Inputs are the training data and the "answersheet" of the
-%emotions that correspond to the data. 
-%the rest are the optimized parameters
-%single is a boolean needed to determine if the output is single or not
+%Inputs are the examples and the EXPECTED targets of the emotions that
+%correspond to the data.
 
-%Assumes the following: 
-%   rows in trainingdata = rows in answersheet
+%Assumes the following:
+%   rows in examples = rows in targets
 %   The no. of rows may not be a factor of 10, overlap of test sets may
 %   exist
 
-%default value
-errorEstimate = 0;
-confused = zeros(6,6);
+
 
 %First find size of training data
-entries = size(trainingData,1);
-%see if valid for 10 fold validation
-if(entries>=10)
+cases = size(examples,1);
 
-%Next find the (maximum) no. of entries per test data set
-    testSize = ceil(entries/10);
-
-%estmates would hold all the estimates after each fold 
-    estimates = [0 0];
-    
-    marker = 1;
-    
-%loops through the folding procress
-    while(marker*testSize<=entries)
-        testSet = trainingData(1:testSize,:);
-        testAnsSet = answersheet(1:testSize,:);
-        trainingData = trainingData(testSize+1:end,:);
-        answersheet = answersheet(testSize+1:end,:);
-        marker = marker+1;
-        
-        %MAKE ANN HERE
-        [net tr] = createNetwork( trainingData,answersheet,hiddenLayerSize, ...
-                	train_function, learning_rate, trans_function, ...
-                 perf_func, no_epoch, no_goal, no_show,single);
-        %CALL testANN
-        predictedValues = testANN(net,testSet);    
-        
-        confused = confused + ConfusionMatrix(testAnsSet,predictedValues);
-        
-        errorVector = bitxor(predictedValues,testAnsSet);
-        errors = sum(errorVector>0);
-        
-        errorEst = errors/size(testAnsSet,1);
-        fprintf('error = %d\n',errorEst);
-        
-        % I would have used mean but I'm not sure how many test sets there
-        % will be all together. Since the array is not as powerful  as the
-        % the lists in haskell, I thought this might be better
-        estimates(1) = estimates(1)+errorEst;
-        estimates(2) = estimates(2)+1;
-        
-        %I know its expensize to reconnect the data but either way I need
-        %to extract the set make the rest into a single matrix and pass it
-        %in the createAllTrees function. Either way its expensive
-        trainingData = [trainingData;testSet];
-        answersheet = [answersheet;testAnsSet];
-        
-    end    
-
-    errorEstimate = estimates(1)/estimates(2);
-    
+%Checks if valid for 10 fold validation
+if(cases >= 10)
+    error('Too few cases to perform ten fold validation with');
 end
 
+%Find the (maximum) no. of entries per test data set
+%Test set takes 10% of full dataset
+testsize = ceil(cases/10);
+
+%default value
+total.cm = zeros(6,6);
+perfold = zeros(10,2);
+
+%Randomize the order of targets and examples once
+order = randperm(cases);
+randexamples = examples(order, :);
+randtargets = targets(order);
+
+%loops through the folding process
+for foldcount=1:10,
+    
+    %Subdivide the dataset into test and training sets
+    testlogic = zeros(cases,1);
+    testlogic(1 + (foldcount - 1) * testsize : foldcount * testsize) = 1;
+    
+    testset = randexamples(testlogic,:);
+    testansset = randtargets(testlogic);
+    
+    trainexamples = randexamples(~testlogic,:);
+    traintargets = randtargets(~testlogic);
+    
+    %Train a CBR system
+    cbr = CBRinit(trainexamples, traintargets);
+    
+    %Generate CM for this fold
+    foldcm = examples2CM(cbr, testset, testansset);
+    perfold(foldcount,:) = mean(CM2RP(foldcm),1);
+    total.cm = total.cm + foldcm;
+end
+
+averagerp = mean(CM2RP(total.cm),1);
+total.recall = averagerp(1);
+total.precision = averagerp(2);
 end
 

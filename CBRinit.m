@@ -1,4 +1,8 @@
 function [cbr] = CBRinit (examples, targets)
+%CBRINIT Trains a CBR system
+%   examples: matrix of AUs returned by the loaddata
+%   targets: vector of labels returned by loaddata
+
   cbr = cbr_create(length(unique(targets)));
   for i = 1:size(examples,1)
     new_case = cbr_new_case(examples(i, :), targets(i, :));
