@@ -1,4 +1,4 @@
-function [ solved ] = reuse ( old_case, new_case )
-  solved		  = new_case;
-  solved.solution = old_case.solution;
+function [ solvedcase ] = reuse ( case, new_case )
+  solvedcase		  = new_case;
+  solvedcase.solution = case.solution;
 end
