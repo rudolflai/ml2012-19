@@ -30,8 +30,8 @@ for i = 1:6
     inds = find(kNNLabels == i);
     if ~isempty(inds)
         sum = 0;    % sum of weight for each class
-        for j = 1:length(inds)
-            sum = sum + weightedFn(xAUs, kNNAUs(inds(j), :));
+        for j = inds
+            sum = sum + weightedFn(xAUs, kNNAUs(j, :));
         end
         if sum > maxDistWeight
             maxDistWeight = sum;
