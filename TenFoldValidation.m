@@ -1,6 +1,9 @@
 function [perfold, total] = TenFoldValidation(examples, targets)
 %TENFOLDVALIDATION : Does the ten fold validation.
-%Returns the error estimate.
+%Returns two structs. 
+%perfold is a 10 X 2 matrix of recall and precision values
+%total is a struct with fields: cm, averagerp (6 X 2 matrix) and f1
+
 %Inputs are the examples and the EXPECTED targets of the emotions that
 %correspond to the data.
 
