@@ -43,10 +43,6 @@ end
 %Test set takes 10% of full dataset
 testsize = ceil(cases/10);
 
-%default value
-total.cm = zeros(6,6);
-perfold = zeros(10,2);
-
 %Randomize the order of targets and examples once
 order = randperm(cases);
 randexamples = examples(order, :);

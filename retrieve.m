@@ -5,7 +5,7 @@
 function [ closestcase ] = retrieve( cbr_sys, newcase )
 
 k = 5;
-distFn = @getEuclideanDistance;
+distFn = @getCityBlockDistance;
 weightedFn = @euclideanWeightedFn;
 
 matrixAUs = reshape([cbr_sys.problem], 45, length(cbr_sys))';
