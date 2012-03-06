@@ -3,6 +3,7 @@
 %
 % xAUs: [1 x 45]
 % matrixAUs: [n x 45]
+% labels: [n x 1]
 
 function [ estimatedLabel ] = kNN( k, xAUs, matrixAUs, labels, distFn, weightedFn )
 
