@@ -19,7 +19,7 @@ for i = ind
     end
 end 
     
-% if doesn't exist, simple add it to the bottom of the CBR system
+% if doesn't exist, simply adds it to the end of the CBR system
 if ~exist
     cbr_sys = [cbr_sys ; solved_case];
 end
