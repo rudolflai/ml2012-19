@@ -11,6 +11,7 @@ ind = find([cbr_sys.solution] == solved_case.solution);
 
 exist = 0;  % flag to check if the case has already existed.
 
+% narrow the scope for checking the existent case.
 for i = ind
     if isequal(cbr_sys(i).problem, solved_case.problem)
         cbr_sys(i).typicality = cbr_sys(i).typicality + 1;
