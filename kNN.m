@@ -3,6 +3,7 @@
 %
 % xAUs: [1 x 45]
 % matrixAUs: [n x 45]
+% labels: [n x 1]
 
 function [ estimatedLabel ] = kNN( k, xAUs, matrixAUs, labels, distFn, weightedFn )
 
@@ -30,8 +31,8 @@ for i = 1:6
     inds = find(kNNLabels == i);
     if ~isempty(inds)
         sum = 0;    % sum of weight for each class
-        for j = 1:length(inds)
-            sum = sum + weightedFn(xAUs, kNNAUs(inds(j), :));
+        for j = inds
+            sum = sum + weightedFn(xAUs, kNNAUs(j, :));
         end
         if sum > maxDistWeight
             maxDistWeight = sum;
