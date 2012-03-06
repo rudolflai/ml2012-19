@@ -22,7 +22,7 @@ end
     
 % if doesn't exist, simply adds it to the end of the CBR system
 if ~exist
-    cbr_sys = [cbr_sys ; solved_case];
+    cbr_sys(length(cbr_sys)+1) = solved_case;
 end
 
 end

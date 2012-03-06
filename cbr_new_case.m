@@ -5,5 +5,7 @@
 % typicality: no. of time a case has been seen in the system
 
 function [ new_case ] = cbr_new_case (example, target)
-  new_case = struct('problem', find(example), 'solution', target, 'typicality', 1);
+
+new_case = struct('problem', example, 'solution', target, 'typicality', 1);
+
 end
