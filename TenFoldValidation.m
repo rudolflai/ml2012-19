@@ -18,7 +18,7 @@ function [perfold, total] = TenFoldValidation(examples, targets)
 cases = size(examples,1);
 
 %Checks if valid for 10 fold validation
-if(cases >= 10)
+if(cases < 10)
     error('Too few cases to perform ten fold validation with');
 end
 
@@ -39,8 +39,9 @@ randtargets = targets(order);
 for foldcount=1:10,
     
     %Subdivide the dataset into test and training sets
-    testlogic = zeros(cases,1);
-    testlogic(1 + (foldcount - 1) * testsize : foldcount * testsize) = 1;
+    testlogic = false(cases,1);
+    testlogic(1 + (foldcount - 1) * testsize : foldcount * testsize) =...
+        true;
     
     testset = randexamples(testlogic,:);
     testansset = randtargets(testlogic);
@@ -53,11 +54,11 @@ for foldcount=1:10,
     
     %Generate CM for this fold
     foldcm = examples2CM(cbr, testset, testansset);
-    perfold(foldcount,:) = mean(CM2RP(foldcm),1);
+    perfold(foldcount,:) = nanmean(CM2RP(foldcm),1);
     total.cm = total.cm + foldcm;
 end
 
 total.averagerp = CM2RP(total.cm);
-total.f1 = mean(total.averagerp(:));
+total.f1 = nanmean(total.averagerp(:));
 end
 
