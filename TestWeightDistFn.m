@@ -58,26 +58,17 @@ for foldcount=1:10,
                 labels = zeros(cases,1);
                 for i=randcases,
                     newcase = cbr_new_case (testset(), 0);
-                    cases;
-                    solvedcase;
+                    oldcase;
                     if(ret==1)
-                        cases = retrieveCityBlock(cbr,newcase,k);
+                        oldcase = retrieveCityBlock(cbr,newcase,k,get);
                     else
-                    if(ret==2)
-                        cases = retrieveChebyshev(cbr,newcase,k);
-                    else
-                        cases = retrieveEuclidean(cbr,newcase,k);
+                        if(ret==2)
+                            oldcase = retrieveChebyshev(cbr,newcase,k,get);
+                        else
+                            oldcase = retrieveEuclidean(cbr,newcase,k,get);
+                        end
                     end
-                    end
-                    if(get==1)
-                        solvedcase = reuseCityBlock(cases,newcase);
-                    else
-                    if(get==2)
-                        solvedcase = reuseChebyshev(cases,newcase);
-                    else
-                        solvedcase = reuseEuclidean(cases,newcase);
-                    end
-                    end
+                    solvedcase = reuse(oldcase,newcase);
                     cbr = retain(cbr, solvedcase);
                     labels(i) = solvedcase.solution;
                     cms{k,ret,get} = cms{k,ret,get}+ ...
@@ -85,8 +76,8 @@ for foldcount=1:10,
                 end
             end
         end
-    
-    end  
+        
+    end
 end
 highestf1=0;
 highestK=0;
@@ -118,23 +109,39 @@ sprintf('weighing fn = %s\n',Rtype{highestGet});
 
 end
 
-function[cases] = retrieveCityBlock(cbr,newcase,k)
-
+function[cases] = retrieveCityBlock(cbr,newcase,k,weigh)
+weight;
+if(ret==1)
+    weight = cityBlockWeightFn(somecase.au,newcase.au);
+else
+    if(ret==2)
+        weight = chebWeightFn(somecase.au,newcase.au);
+    else
+        weight = euclideanWeightFn(somecase.au,newcase.au);
+    end
 end
-function[cases] = retrieveChebyshev(cbr,newcase,k)
-
 end
-function[cases] = retrieveEuclidean(cbr,newcase,k)
-
+function[cases] = retrieveChebyshev(cbr,newcase,k,weigh)
+weight;
+if(ret==1)
+    weight = cityBlockWeightFn(somecase.au,newcase.au);
+else
+    if(ret==2)
+        weight = chebWeightFn(somecase.au,newcase.au);
+    else
+        weight = euclideanWeightFn(somecase.au,newcase.au);
+    end
 end
-function[solved] = reuseCityBlock(oldcases,newcase)
-
 end
-
-function[solved] = reuseChebyshev(oldcases,newcase)
-
+function[cases] = retrieveEuclidean(cbr,newcase,k,weigh)
+weight;
+if(ret==1)
+    weight = cityBlockWeightFn(somecase.au,newcase.au);
+else
+    if(ret==2)
+        weight = chebWeightFn(somecase.au,newcase.au);
+    else
+        weight = euclideanWeightFn(somecase.au,newcase.au);
+    end
 end
-
-function[solved] = reuseEuclidean(oldcases,newcase)
-
 end
