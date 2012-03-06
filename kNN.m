@@ -4,8 +4,9 @@
 % xAUs: [1 x 45]
 % matrixAUs: [n x 45]
 % labels: [n x 1]
+% typicalites: [n x 1]
 
-function [ estimatedLabel ] = kNN( k, xAUs, matrixAUs, labels, distFn, weightedFn )
+function [ estimatedLabel ] = kNN( k, xAUs, matrixAUs, labels, distFn, weightedFn, typicalities )
 
 estimatedLabel = 7; % 7 indicates neutral in emolab2str.m
 
@@ -18,7 +19,8 @@ for i = 1:nrows
     distind(i, :) = [d i];
 end
 
-distind = sortrows(distind); % sorts the rows in distind w.r.t. the first column i.e. distance
+% sorts the rows in distind w.r.t. the first column, i.e. distance
+distind = sortrows(distind); 
 
 kNNind = distind(1:k, 2);
 kNNAUs = matrixAUs(kNNind, :);
@@ -32,7 +34,7 @@ for i = 1:6
     if ~isempty(inds)
         sum = 0;    % sum of weight for each class
         for j = inds
-            sum = sum + weightedFn(xAUs, kNNAUs(j, :));
+            sum = sum + weightedFn(xAUs, kNNAUs(j, :)) * typicalities(j);
         end
         if sum > maxDistWeight
             maxDistWeight = sum;
