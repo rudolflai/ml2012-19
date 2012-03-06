@@ -6,7 +6,8 @@
 % labels: [n x 1]
 % typicalites: [n x 1]
 
-function [ estimatedLabel ] = kNN( k, xAUs, matrixAUs, labels, distFn, weightedFn, typicalities )
+function [ closestCase, estimatedLabel ] = kNN( k, xAUs, matrixAUs, ...
+    labels, distFn, weightedFn, typicalities )
 
 estimatedLabel = 7; % 7 indicates neutral in emolab2str.m
 
@@ -49,4 +50,14 @@ for i = 1:6
     end
 end
     
+% Randomise if ambiguous
+if length(estimatedLabel) ~= 1
+    estimatedLabel = estimatedLabel(ceil(rand()*length(estimatedLabel)));
+end
+
+inds = find(kNNLabels == estimatedLabel);
+ind = inds(1);
+closestCase = struct('problem', matrixAUs(ind), 'solution', labels(ind),...
+    'typicality', typicalities(ind));
+
 end
