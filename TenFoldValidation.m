@@ -59,6 +59,6 @@ for foldcount=1:10,
 end
 
 total.averagerp = CM2RP(total.cm);
-total.f1 = nanmean(total.averagerp(:));
+total.f1 = nanmean(total.averagerp,2);
 end
 
