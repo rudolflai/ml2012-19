@@ -8,7 +8,7 @@ k = 5;
 distFn = @getEuclideanDistance;
 weightedFn = @euclideanWeightedFn;
 
-matrixAUs = reshape([cbr_sys.problem], length(cbr_sys), 45);
+matrixAUs = reshape([cbr_sys.problem], 45, length(cbr_sys))';
 closestcase = kNN(k, [newcase.problem], matrixAUs, [cbr_sys.solution], ...
     distFn, weightedFn, [cbr_sys.typicality]);
 

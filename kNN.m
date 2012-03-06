@@ -26,6 +26,7 @@ distind = sortrows(distind);
 kNNind = distind(1:k, 2);
 kNNAUs = matrixAUs(kNNind, :);
 kNNLabels = labels(kNNind);
+kNNTypicalities = typicalities(kNNind);
 
 % estimate the nearest label using weightedFn
 maxDistWeight = 0;
@@ -35,8 +36,9 @@ for i = 1:6
     if ~isempty(inds)
         sum = 0;    % sum of weight for each class
         for j = inds
-            sum = sum + weightedFn(xAUs, kNNAUs(j, :)) * typicalities(j);
+            sum = sum + weightedFn(xAUs, kNNAUs(j, :)) * kNNTypicalities(j);
         end
+        
         if sum > maxDistWeight
             maxDistWeight = sum;
             estimatedLabel = i;
@@ -49,15 +51,17 @@ for i = 1:6
         end
     end
 end
-    
+
 % Randomise if ambiguous
 if length(estimatedLabel) ~= 1
     estimatedLabel = estimatedLabel(ceil(rand()*length(estimatedLabel)));
 end
 
-inds = find(kNNLabels == estimatedLabel);
+indkNN = find(kNNLabels == estimatedLabel);
+
+inds = kNNind(indkNN);
 ind = inds(1);
-closestCase = struct('problem', matrixAUs(ind), 'solution', labels(ind),...
+closestCase = struct('problem', matrixAUs(ind, :), 'solution', labels(ind),...
     'typicality', typicalities(ind));
 
 end
