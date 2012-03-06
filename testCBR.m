@@ -4,12 +4,11 @@ function [ labels ] = testCBR( cbr, x )
 %   x: matrix of features in the same format as that returned by loaddata
 
 cases = size(x,1);
-randcases = randperm(cases);
-currentcbrstate = cbr;
+randcaseorder = randperm(cases);
 labels = zeros(cases,1);
 
-for i=randcases,
-    [labels(i),currentcbrstate] = testExample(currentcbrstate, x(i,:));
+for i=randcaseorder,
+    [labels(i),cbr] = testExample(cbr, x(i,:));
 end
 
 end
