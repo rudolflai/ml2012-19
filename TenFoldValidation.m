@@ -1,11 +1,11 @@
-function [perfold, total] = TenFoldValidation(examples, targets)
-%TENFOLDVALIDATION : Does the ten fold validation.
-%Returns two structs. 
-%perfold is a 10 X 2 matrix of recall and precision values
-%total is a struct with fields: cm, averagerp (6 X 2 matrix) and f1
+function [perfold] = TenFoldValidation(examples, targets, algofn)
+%TENFOLDVALIDATION : Does the ten fold validation for 1 algorithm
+%perfold is a 10 X 6 matrix of f1 measures for each fold and emotion
 
 %Inputs are the examples and the EXPECTED targets of the emotions that
-%correspond to the data.
+%correspond to the data. 
+%algofn:    function which takes in the split data and returns a confusion
+%           matrix
 
 %Assumes the following:
 %   rows in examples = rows in targets
@@ -27,8 +27,7 @@ end
 testsize = ceil(cases/10);
 
 %default value
-total.cm = zeros(6,6);
-perfold = zeros(10,2);
+perfold = zeros(10,6);
 
 %Randomize the order of targets and examples once
 order = randperm(cases);
@@ -48,17 +47,10 @@ for foldcount=1:10,
     
     trainexamples = randexamples(~testlogic,:);
     traintargets = randtargets(~testlogic);
-    
-    %Train a CBR system
-    cbr = CBRinit(trainexamples, traintargets);
-    
-    %Generate CM for this fold
-    foldcm = examples2CM(cbr, testset, testansset);
-    perfold(foldcount,:) = nanmean(CM2RP(foldcm),1);
-    total.cm = total.cm + foldcm;
-end
 
-total.averagerp = CM2RP(total.cm);
-total.f1 = nanmean(total.averagerp,2);
+    foldcm = algofn(trainexamples, traintargets, testset, testansset);
+
+    perfold(foldcount,:) = RP2F1(CM2RP(foldcm));
+end
 end
 
