@@ -19,7 +19,7 @@ for i=1:3
     rp = CM2RP(cms{i});
     f1s{i} = RP2F1(rp); 
     display(f1s{i});
-    meanf1 = mean(f1s{i});
+    meanf1 = nanmean(f1s{i});
     fprintf('Average F1 value = %d\n',meanf1);
     if(meanf1>bestf1)
         bestf1= meanf1;

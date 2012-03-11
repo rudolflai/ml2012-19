@@ -8,9 +8,8 @@ f1 = zeros(6,1);
 for i=1:6,
     recall = rpmatrix(i,1);
     precision = rpmatrix(i,2);
-    if((recall+precision)~=0)
-        f1(i) = 2 * recall * precision / ( recall + precision);
-    end
+
+    f1(i) = 2 * recall * precision / ( recall + precision);
 end
 end
 
