@@ -20,10 +20,16 @@ for row = 1:entries
                 if(currentdepth>depths(treeNo))
                     currentdepth=depths(treeNo);
                     labelPredictions(row) = treeNo;
-                elseif (currentdepth==depths(treeNo)&&...
-                     (trees(labelPredictions(row)).depth...
-                            >trees(treeNo).depth))
+                elseif (currentdepth==depths(treeNo))
+                     if(trees(labelPredictions(row)).depth...
+                            >trees(treeNo).depth)
                         labelPredictions(row) = treeNo;
+                     elseif (trees(labelPredictions(row)).depth...
+                            ==trees(treeNo).depth)
+                        if(randi(2,1)==1)
+                            labelPredictions(row) = treeNo;
+                        end
+                     end
                 end
             else
                 labelPredictions(row) = treeNo;
