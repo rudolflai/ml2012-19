@@ -8,12 +8,18 @@ for i=1:6,
     true_p = cfmatrix(i,i);
     sum_trials = sum(cfmatrix(i,:));
     sum_p = sum(cfmatrix(:,i));
-    
+    if(true_p==0)
+        rpmatrix(i,1) = 0;
+        rpmatrix(i,2) = 0;
+    else
     %Recall
     rpmatrix(i,1) = true_p/sum_trials;
     
     %Precision
     rpmatrix(i,2) = true_p/sum_p;
+    
+        
+    end
 end
 end
 
