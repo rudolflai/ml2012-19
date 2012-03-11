@@ -1,5 +1,5 @@
 
-function [ trees ] = createAllTrees(examples, targets)
+function [ trees ] = createAllTrees(examples, targets, tenfold)
  	
 %CREATETREES Generates trees for all the emotion labels and attaches a
 	  	
@@ -16,5 +16,21 @@ function [ trees ] = createAllTrees(examples, targets)
 
 	  	
 trees = arrayfun(@(x) makeTreeForLabel(examples, targets, x), 1:6);
+	
+if (tenfold)
+	  	
+% Generate precision to measure the reliability of each tree
+	  	
+    [~,cm] = TenFoldValidation(examples,targets,0);
+	  	
+    rplist = CM2RP(cm);
+	  	
+    for i=1:6,
+	  	
+        trees(i).precision = rplist(i,2);
+	  	
+    end
+	  	
+end
 	  	
 end
