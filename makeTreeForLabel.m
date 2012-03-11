@@ -10,9 +10,9 @@ function [ tree ] = makeTreeForLabel( samples, targets, target_emotion )
 	  	
 
 	  	
-tree = makeTree(samples,1:size(samples,2),targets == target_emotion);
+[tree depth] = makeTree(samples,1:size(samples,2),targets == target_emotion,0);
 	  	
-
+tree.depth = depth;
 	  	
 
 	  	

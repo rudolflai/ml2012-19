@@ -1,14 +1,13 @@
-function [ tree ] = makeTree( samples, attributes, targets )
+function [ tree depth ] = makeTree( samples, attributes, targets, depth )
 	  	
 %MAKETREE Creates the decision tree
-	  	
 %   samples: the matrix of AUs activation
-	  	
 %   attributes: the list of AUs yet to be used for learning
-	  	
 %   targets: the list of remapped labels (1s/0s)
 	  	
-
+	  
+depths(1) = depth+1;
+depths(2) = depth+1;
 	  	
 if all(targets)
 	  	
@@ -23,16 +22,12 @@ elseif isempty(attributes)
     tree = makeLeafNode(majorityValue(targets));
 	  	
 else
-	  	
+	
     bestattribute = best_attribute(samples, attributes, targets);
 	  	
     tree = makeBranchNode(bestattribute);    
-	  	
     
-	  	
     for val=0:1,
-	  	
-        
 	  	
         index = samples(:,bestattribute) == val;
 	  	
@@ -40,23 +35,17 @@ else
 	  	
         childtargets = targets(index);
 	  	
-    
-	  	
         if isempty(childsamples)
-	  	
-            tree.kids{val + 1} = makeLeafNode(majorityValue(targets));
-	  	
+            tree.kids{val + 1} = makeLeafNode(majorityValue(targets));  	
         else
-	  	
-            tree.kids{val + 1} = makeTree(childsamples, ...
-                attributes(attributes~=bestattribute), childtargets);
-	  	
+            [tree.kids{val + 1} depths(val+1)] = makeTree(childsamples, ...
+                attributes(attributes~=bestattribute), childtargets,depth+1);
         end
 	  	
     end
 	  	
 end
-	  	
+depth = max(depths);
 end
 	  	
 

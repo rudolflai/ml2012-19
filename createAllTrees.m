@@ -1,4 +1,4 @@
-function [ trees ] = createAllTrees(examples, targets, tenfold)
+function [ trees ] = createAllTrees(examples, targets)
 %CREATETREES Generates trees for all the emotion labels and attaches a
 %   field to provide the precision if tenfold = 1, so that the relative reliability of 
 %   each tree can be used to resolve ambiguity
