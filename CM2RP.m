@@ -19,7 +19,7 @@ for i=1:6,
     rpmatrix(i,2) = true_p/sum_p;
     
         
-    end
+end
 end
 
 
