@@ -24,7 +24,7 @@ end
 
 %Find the (maximum) no. of entries per test data set
 %Test set takes 10% of full dataset
-testsize = ceil(cases/10);
+testsize = floor(cases/10);
 
 %default value
 perfold = zeros(10,6);
