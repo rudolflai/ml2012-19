@@ -37,7 +37,7 @@ for i = 1:6
     for j = comb
         x = f1Measures(i, :, j(1));
         y = f1Measures(i, :, j(2));
-        h = ttest2(x, y, 0.05);
+        h = ttest2(x, y, sigLevel);
         if h == 0
             fprintf('>>Null hypothesis accepted, %s and %s have the same means on %s\n', algolab2str(j(1)), algolab2str(j(2)), emolab2str(i));
         else
